@@ -139,40 +139,13 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   data() {
     return {
       activeIndex: '1',
-      userTable: [
-        {
-          index: 1,
-          userId: '1001',
-          userName: '王小虎',
-          sex: '男',
-          phone: '15854187471'
-        },
-        {
-          index: 2,
-          userId: '1002',
-          userName: '李明',
-          sex: '女',
-          phone: '13954007471'
-        },
-        {
-          index: 3,
-          userId: '1003',
-          userName: '杨过',
-          sex: '男',
-          phone: '13554188888'
-        },
-        {
-          index: 4,
-          userId: '1004',
-          userName: '金晓语',
-          sex: '女',
-          phone: '18754113503'
-        }
-      ],
+      userTable: [],
       bookTable: [
         {
           bookId: '101',
@@ -203,37 +176,11 @@ export default {
           price: 44,
         },
       ],
-      logTable: [
-        {
-          orderId: '3001',
-          bookId: '101',
-          userId: '王小虎',
-          lendOutDate: '2019-05-02',
-          giveBackDate: '2019-05-08'
-        },
-        {
-          orderId: '3002',
-          bookId: '103',
-          userId: '王小虎',
-          lendOutDate: '2019-04-02',
-          giveBackDate: '2019-05-02'
-        },
-        {
-          orderId: '3003',
-          bookId: '102',
-          userId: '王小虎',
-          lendOutDate: '2019-05-02',
-          giveBackDate: ''
-        },
-        {
-          orderId: '3004',
-          bookId: '104',
-          userId: '王小虎',
-          lendOutDate: '2019-03-12',
-          giveBackDate: '2019-05-07'
-        },
-      ]
+      logTable: []
     };
+  },
+  created() {
+    this.getTables();
   },
   methods: {
     handleSelect(key, keyPath) {
@@ -249,6 +196,19 @@ export default {
             message: `退出成功`
           });
           this.$router.push({ path: "./" });
+        }
+      });
+    },
+    getTables() {
+      const that = this;
+      axios.get('http://localhost:8090/userTable').then((res) => {
+        if(res.status == 200){
+          this.userTable = res.data.dataSource;
+        }
+      });
+      axios.get('http://localhost:8090/logTable').then((res) => {
+        if(res.status == 200){
+          this.bookTable = res.data.bookTable;
         }
       });
     }
